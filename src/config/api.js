@@ -20,6 +20,9 @@ export const API_ENDPOINTS = {
   SIGNUP: `${API_BASE_URL}/signUp`,
   LOGIN: `${API_BASE_URL}/login`,
   GET_USER: (id) => `${API_BASE_URL}/user/${id}`,
+  GET_USER_FAVS: (id) => `${API_BASE_URL}/user/${id}/favourites`,
+  ADD_FAV: (id) => `${API_BASE_URL}/user/${id}/favourites`,
+  REMOVE_FAV: (userId, recipeId) => `${API_BASE_URL}/user/${userId}/favourites/${recipeId}`,
   
   // Recipes
   GET_RECIPES: `${API_BASE_URL}/recipe`,
