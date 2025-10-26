@@ -12,9 +12,7 @@ export default function RecipeItems() {
     const recipes = useLoaderData()
     const [allRecipes, setAllRecipes] = useState()
     let path = window.location.pathname === "/myRecipe" ? true : false
-    let favItems = JSON.parse(localStorage.getItem("fav")) ?? []
-    // local state for toggle is no longer required here
-    // const [isFavRecipe, setIsFavRecipe] = useState(false)
+    const [favItems, setFavItems] = useState(() => JSON.parse(localStorage.getItem("fav")) ?? [])
     const navigate=useNavigate()
     console.log(allRecipes)
 
@@ -33,8 +31,12 @@ export default function RecipeItems() {
                 headers: { Authorization: 'Bearer ' + token }
             })
             setAllRecipes(recipes => recipes.filter(recipe => recipe._id !== id))
-            let filterItem = favItems.filter(recipe => recipe._id !== id)
-            localStorage.setItem("fav", JSON.stringify(filterItem))
+            // also remove from favourites state + localStorage
+            setFavItems(prev => {
+                const next = prev.filter(recipe => recipe._id !== id)
+                localStorage.setItem("fav", JSON.stringify(next))
+                return next
+            })
         } catch (error) {
             console.error("Failed to delete recipe:", error)
             // show more helpful message when backend returns 401
@@ -47,10 +49,12 @@ export default function RecipeItems() {
     }
 
     const favRecipe = (item) => {
-        let filterItem = favItems.filter(recipe => recipe._id !== item._id)
-        favItems = favItems.filter(recipe => recipe._id === item._id).length === 0 ? [...favItems, item] : filterItem
-        localStorage.setItem("fav", JSON.stringify(favItems))
-        // state toggle removed; components read directly from localStorage when rendering
+        setFavItems(prev => {
+            const exists = prev.some(recipe => recipe._id === item._id)
+            const next = exists ? prev.filter(recipe => recipe._id !== item._id) : [...prev, item]
+            localStorage.setItem("fav", JSON.stringify(next))
+            return next
+        })
     }
 
     return (
