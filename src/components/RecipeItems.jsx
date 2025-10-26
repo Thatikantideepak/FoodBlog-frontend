@@ -123,19 +123,28 @@ export default function RecipeItems() {
                 }
             } catch (err) {
                 console.error('Failed to update favourite on server', err)
-                // revert optimistic update
-                setFavItems(prev => {
-                    // prev is optimisticNext; compute revert
-                    return exists ? [...prev, item] : prev.filter(r => r._id !== item._id)
-                })
-                // restore previous value in localStorage
-                const prevLocal = JSON.parse(localStorage.getItem('fav')) ?? []
-                // prevLocal may already be optimistic; try to reconstruct revert
-                const reverted = exists ? [...(prevLocal.filter(r => r._id !== item._id)), item] : prevLocal.filter(r => r._id !== item._id)
-                localStorage.setItem('fav', JSON.stringify(reverted))
-
-                const serverMsg = err?.response?.data?.message || err?.response?.data || err.message
-                alert('Failed to update favourite: ' + serverMsg)
+                // If unauthorized, revert and ask user to login again
+                if (err.response && err.response.status === 401) {
+                    // revert optimistic update
+                    setFavItems(prev => {
+                        return exists ? [...prev, item] : prev.filter(r => r._id !== item._id)
+                    })
+                    // revert localStorage
+                    const prevLocal = JSON.parse(localStorage.getItem('fav')) ?? []
+                    const reverted = exists ? [...(prevLocal.filter(r => r._id !== item._id)), item] : prevLocal.filter(r => r._id !== item._id)
+                    localStorage.setItem('fav', JSON.stringify(reverted))
+                    alert('Unauthorized: please log in again before updating favourites.')
+                } else {
+                    // For non-auth/server errors, keep optimistic UI and queue the operation for retry
+                    console.warn('Favourite update failed; queuing for retry and keeping optimistic UI.')
+                    try {
+                        const pending = JSON.parse(localStorage.getItem('pendingFavOps') || '[]')
+                        pending.push({ action: exists ? 'remove' : 'add', recipeId: item._id, userId, ts: Date.now() })
+                        localStorage.setItem('pendingFavOps', JSON.stringify(pending))
+                    } catch (qerr) {
+                        console.error('Failed to queue pending fav op', qerr)
+                    }
+                }
             }
         }
         // guests already handled by optimistic update
