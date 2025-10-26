@@ -24,13 +24,25 @@ export default function RecipeItems() {
 
     const onDelete = async (id) => {
         try {
-            await axios.delete(API_ENDPOINTS.DELETE_RECIPE(id))
+            const token = localStorage.getItem('token')
+            if (!token) {
+                alert('You must be logged in to delete a recipe.')
+                return
+            }
+            await axios.delete(API_ENDPOINTS.DELETE_RECIPE(id), {
+                headers: { Authorization: 'Bearer ' + token }
+            })
             setAllRecipes(recipes => recipes.filter(recipe => recipe._id !== id))
             let filterItem = favItems.filter(recipe => recipe._id !== id)
             localStorage.setItem("fav", JSON.stringify(filterItem))
         } catch (error) {
             console.error("Failed to delete recipe:", error)
-            alert("Failed to delete recipe. Please try again.")
+            // show more helpful message when backend returns 401
+            if (error.response && error.response.status === 401) {
+                alert('Unauthorized: please log in again before deleting recipes.')
+            } else {
+                alert("Failed to delete recipe. Please try again.")
+            }
         }
     }
 
