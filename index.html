@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // Runtime API base override - this lets you point the built frontend at a backend without rebuilding.
+      // It will be used by `frontend/src/config/api.js` if present. Change this value if you need to
+      // redirect a deployed build to a different backend temporarily.
+      window.__API_BASE__ = window.__API_BASE__ || "https://foodblog-backend-ayn6.onrender.com";
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

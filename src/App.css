@@ -1,0 +1,790 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Theme variables (light defaults). Dark overrides set in @media below. */
+:root {
+  --bg: #ffffff;
+  --text: #213547;
+  --header-bg: #ffffff;
+  --link-color: var(--primary);
+  --link-hover: var(--primary-hover);
+  --card-bg: transparent;
+  --card-body-bg: #d4f6e8;
+  --wave-fill: var(--card-body-bg);
+  --card-border: rgba(0,0,0,0.2);
+  --form-input-bg: #ffffff;
+  --form-input-border: rgb(156 163 175);
+  --modal-bg: #ffffff;
+  --button-bg: #213547;
+  --button-text: #ffffff;
+  --footer-bg: #213547;
+  --active-bg: #d4f6e8;
+  --danger: rgb(239,53,53);
+  --accent: #1fb6a3;
+  --muted: rgba(0,0,0,0.6);
+  --placeholder: rgba(0,0,0,0.6);
+  --shadow: rgba(0,0,0,0.25);
+}
+
+/* Dark mode support: set theme variables for dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1a1a;
+    --text: #ffffff;
+    --header-bg: #2d2d2d;
+    --link-color: #ffffff;
+    --link-hover: #d4f6e8;
+    --card-bg: #2d2d2d;
+    --card-body-bg: #3a3a3a;
+    --card-border: #404040;
+    --form-input-bg: #2d2d2d;
+    --form-input-border: #404040;
+    --modal-bg: #2d2d2d;
+    --button-bg: #213547;
+    --button-text: #ffffff;
+    --footer-bg: #213547;
+    --active-bg: #d4f6e8;
+    --danger: rgb(239,53,53);
+    --primary: #213547;
+    --primary-hover: #2c4860;
+    --surface: #ffffff;
+    --danger-hover: #c82333;
+    --accent: #0ea5a4;
+    --muted: rgba(255,255,255,0.65);
+    --placeholder: rgba(255,255,255,0.6);
+    --shadow: rgba(0,0,0,0.6);
+    --footer-bg: rgba(16,24,32,0.9);
+    --wave-fill: #2a2a2a;
+  }
+}
+
+header {
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 1px 0 5px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top:0;
+  z-index: 10;
+  background-color: var(--header-bg);
+  color: var(--text);
+}
+
+header ul{
+  width: 40%;
+  height: 50px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+header ul li{
+  list-style: none;
+  cursor: pointer;
+}
+
+li a{
+  color: var(--link-color);
+  transition: all 0.3s;
+  padding:2px 10px;
+  border-radius: 10px;
+}
+
+li a:hover{
+  color: var(--link-hover);
+}
+
+li .login{
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Ensure active nav links are clearly visible and have good contrast */
+header ul li a.active,
+header ul li a.active:link,
+header ul li a.active:visited {
+  background-color: var(--accent) !important;
+  color: var(--button-text) !important;
+  padding: 6px 12px;
+  border-radius: 12px;
+}
+
+/* Also handle when NavLink returns plain .active on the element */
+header ul li .active {
+  background-color: var(--accent) !important;
+  color: var(--button-text) !important;
+  padding: 6px 12px;
+  border-radius: 12px;
+}
+
+header h2{
+  margin-left: 1rem;
+}
+
+section{
+  height: 100vh;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.home{
+  display: flex;
+  margin-top: 6rem;
+  gap:10rem;
+  position: relative;
+}
+
+.home .left h1{
+  margin-bottom: 1rem;
+}
+
+.home button{
+  color: var(--button-text);
+  border:none;
+  background-color: var(--accent);
+  width: 200px;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+}
+
+.home a:hover{
+  color: var(--button-text);
+  background-color: var(--primary-hover);
+}
+
+.home .left h5{
+  margin:2rem 0;
+}
+
+.bg svg{
+  position: absolute;
+  bottom: 0;
+}
+
+.card-container{
+  width: 80%;
+  margin: auto;
+  display: grid;
+  gap:2.5rem;
+  grid-template-columns: repeat(auto-fit,13rem);
+  cursor:pointer
+}
+
+.card{
+  box-shadow: 0 1px 2px var(--shadow);
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  overflow: hidden;
+}
+
+.card-body{
+  background-color: var(--card-body-bg);
+  padding: 1rem;
+}
+
+.card img{
+  display: block;
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.card-body .title{
+  margin-bottom:5px;
+  font-size: 15px;
+  font-weight:500;
+}
+
+.card-body .icons{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-body .timer{
+  display: flex;
+  align-items: center;
+  gap:2px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.action{
+  display: flex;
+  font-size: 19px;
+  justify-content: space-between;
+  align-items: center;
+  width: 45px;
+}
+
+.editIcon{
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.action a:hover{
+  color: var(--text);
+}
+
+.deleteIcon{
+  color: rgb(239,53,53);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal{
+  position: fixed;
+  top: 34%;
+  z-index: 10;
+  padding: 2rem;
+  border-radius: 6px;
+  border:none;
+  left:30%;
+  width: 40%;
+  background-color: var(--modal-bg);
+  color: var(--text);
+}
+
+.backdrop{
+  position: fixed;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 9;
+}
+
+.form{
+  width: 71%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.form-header{
+  background-color: var(--active-bg);
+  height: 3px;
+  text-align: center;
+}
+
+.form-control{
+  display: flex;
+  justify-content: space-between;
+  gap:1rem;
+  margin-top: 1rem;
+}
+
+.form-control .input{
+  flex-basis: 70%;
+  border:1px solid var(--form-input-border);
+  border-radius: 8px;
+  height: 40px;
+  padding: 8px 10px;
+  background-color: var(--form-input-bg);
+  color: var(--text);
+}
+
+.form-control .input-textarea{
+  border: 1px solid var(--form-input-border);
+  border-radius: 8px;
+  flex-basis: 70%;
+  padding: 12px;
+  min-height: 120px;
+  background-color: var(--form-input-bg);
+  color: var(--text);
+}
+
+.form button{
+  margin:2rem 0;
+  border:none;
+  background-color: var(--accent);
+  color: var(--button-text);
+  font-size: 14px;
+  box-shadow: 0 1px 5px var(--shadow);
+  padding: 10px 18px;
+  border-radius: 10px;
+}
+
+.form p{
+  cursor: pointer;
+  display: inline;
+  border-bottom: 1px solid var(--primary-accent);
+  font-size: 14px;
+  color: var(--primary-accent);
+}
+
+.form .error{
+  color:red;
+  font-size: 13px;
+}
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.add-recipe{
+  width: 100%;
+}
+
+.recipe{
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+}
+
+.footer{
+  width:100vw;
+  height: 44px;
+  color: var(--button-text);
+  background-color: var(--footer-bg);
+  position: fixed;
+  bottom: 0;
+  text-align: center;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  font-size: 14px;
+}
+
+/* Add a subtle top border to separate footer from content */
+.footer::before{
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+}
+
+.outer-container{
+  width: 70%;
+  margin: 5rem auto;
+}
+
+.outer-container .profile{
+  display: flex;
+  gap:1rem;
+  align-items: center;
+}
+
+.outer-container .title{
+  margin: 1rem 0;
+  text-transform: uppercase;
+}
+
+.outer-container .recipe-details{
+  display: flex;
+  gap: 3rem;
+  align-items: justify;
+  margin-top: 1rem;
+}
+
+.active{
+  color: var(--text) !important;
+  background-color: var(--active-bg);
+}
+
+/* Account Popup Styles */
+.account-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.account-popup-content {
+  background: var(--modal-bg);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 8px 28px var(--shadow);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: var(--text);
+}
+
+/* Placeholder color to improve contrast in both modes */
+input::placeholder, textarea::placeholder {
+  color: var(--placeholder);
+  opacity: 1;
+}
+
+.account-popup-content h2 {
+  color: #213547;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.account-info {
+  margin-bottom: 2rem;
+}
+
+.account-info .info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.account-info .info-item:last-child {
+  border-bottom: none;
+}
+
+.account-info label {
+  font-weight: 600;
+  color: #213547;
+}
+
+.account-info span {
+  color: #666;
+}
+
+.account-actions {
+  margin-top: 1.5rem;
+}
+
+.logout-btn {
+  background: var(--danger);
+  color: var(--button-text);
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.logout-btn:hover {
+  background: var(--danger-hover);
+}
+
+/* Dark mode for account popup */
+@media (prefers-color-scheme: dark) {
+  .account-popup-content {
+    background: var(--modal-bg);
+    color: var(--text);
+  }
+  
+  .account-popup-content h2 {
+    color: var(--text);
+  }
+  
+  .account-info label {
+    color: var(--text);
+  }
+  
+  .account-info span {
+    color: var(--muted);
+  }
+  
+  .account-info .info-item {
+    border-bottom-color: var(--card-border);
+  }
+  
+  .close-btn {
+    color: var(--muted);
+  }
+  
+  .close-btn:hover {
+    color: var(--text);
+  }
+}
+
+/* Account Page Styles (for reference) */
+.account-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  margin-top: 6rem;
+}
+
+.account-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.account-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #213547;
+}
+
+.account-header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.account-content {
+  display: grid;
+  gap: 2rem;
+}
+
+.account-section {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.account-section h2 {
+  color: #213547;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.profile-info {
+  display: grid;
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.info-item label {
+  font-weight: 600;
+  color: #213547;
+}
+
+.info-item span {
+  color: #666;
+}
+
+.recipe-stats {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 1rem;
+  background: var(--card-body-bg);
+  border-radius: 8px;
+  min-width: 120px;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.recipe-card {
+  background: var(--surface);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--shadow);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.recipe-card:hover {
+  transform: translateY(-2px);
+}
+
+.recipe-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.recipe-card h4 {
+  padding: 0.5rem;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--primary);
+}
+
+.recipe-card p {
+  padding: 0 0.5rem 0.5rem;
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.view-all-btn, .create-recipe-btn {
+  background: var(--primary);
+  color: var(--button-text);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.view-all-btn:hover, .create-recipe-btn:hover {
+  background: var(--primary-hover);
+}
+
+.no-recipes {
+  text-align: center;
+  padding: 2rem;
+  color: var(--muted);
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.action-btn {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.action-btn.primary {
+  background: var(--primary);
+  color: var(--button-text);
+}
+
+.action-btn.primary:hover {
+  background: var(--primary-hover);
+}
+
+.action-btn.secondary {
+  background: var(--card-body-bg);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.action-btn.secondary:hover {
+  background: var(--primary);
+  color: var(--button-text);
+}
+
+.action-btn.danger {
+  background: var(--danger);
+  color: var(--button-text);
+}
+
+.action-btn.danger:hover {
+  background: var(--danger-hover);
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+
+/* Dark mode styles for account page */
+@media (prefers-color-scheme: dark) {
+  .account-header h1 {
+    color: var(--text);
+  }
+  
+  .account-header p {
+    color: var(--muted);
+  }
+  
+  .account-section {
+    background: var(--card-bg);
+    color: var(--text);
+  }
+  
+  .account-section h2 {
+    color: var(--text);
+  }
+  
+  .info-item label {
+    color: var(--text);
+  }
+  
+  .info-item span {
+    color: var(--muted);
+  }
+  
+  .stat-item {
+    background: var(--card-body-bg);
+  }
+  
+  .stat-number {
+    color: var(--text);
+  }
+  
+  .stat-label {
+    color: var(--muted);
+  }
+  
+  .recipe-card {
+    background: var(--surface);
+  }
+  
+  .recipe-card h4 {
+    color: var(--text);
+  }
+  
+  .recipe-card p {
+    color: var(--muted);
+  }
+  
+  .no-recipes {
+    color: var(--muted);
+  }
+}
+
+
+
