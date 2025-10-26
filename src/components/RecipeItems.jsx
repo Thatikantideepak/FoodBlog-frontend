@@ -91,6 +91,13 @@ export default function RecipeItems() {
 
     const favRecipe = async (item) => {
         const exists = favItems.some(recipe => recipe._id === item._id)
+        // compute optimistic next state
+        const optimisticNext = exists ? favItems.filter(r => r._id !== item._id) : [...favItems, item]
+
+        // Apply optimistic update locally first
+        setFavItems(optimisticNext)
+        localStorage.setItem('fav', JSON.stringify(optimisticNext))
+
         // logged in: persist to server
         if (token && userId) {
             try {
@@ -98,27 +105,40 @@ export default function RecipeItems() {
                     const res = await axios.delete(API_ENDPOINTS.REMOVE_FAV(userId, item._id), {
                         headers: { Authorization: 'Bearer ' + token }
                     })
-                    setFavItems(res.data.favourites || [])
-                    localStorage.setItem('fav', JSON.stringify(res.data.favourites || []))
+                    // use authoritative server response if provided
+                    const serverFavs = res.data?.favourites
+                    if (serverFavs) {
+                        setFavItems(serverFavs)
+                        localStorage.setItem('fav', JSON.stringify(serverFavs))
+                    }
                 } else {
                     const res = await axios.post(API_ENDPOINTS.ADD_FAV(userId), { recipeId: item._id }, {
                         headers: { Authorization: 'Bearer ' + token }
                     })
-                    setFavItems(res.data.favourites || [])
-                    localStorage.setItem('fav', JSON.stringify(res.data.favourites || []))
+                    const serverFavs = res.data?.favourites
+                    if (serverFavs) {
+                        setFavItems(serverFavs)
+                        localStorage.setItem('fav', JSON.stringify(serverFavs))
+                    }
                 }
             } catch (err) {
                 console.error('Failed to update favourite on server', err)
-                alert('Failed to update favourite. Please try again.')
+                // revert optimistic update
+                setFavItems(prev => {
+                    // prev is optimisticNext; compute revert
+                    return exists ? [...prev, item] : prev.filter(r => r._id !== item._id)
+                })
+                // restore previous value in localStorage
+                const prevLocal = JSON.parse(localStorage.getItem('fav')) ?? []
+                // prevLocal may already be optimistic; try to reconstruct revert
+                const reverted = exists ? [...(prevLocal.filter(r => r._id !== item._id)), item] : prevLocal.filter(r => r._id !== item._id)
+                localStorage.setItem('fav', JSON.stringify(reverted))
+
+                const serverMsg = err?.response?.data?.message || err?.response?.data || err.message
+                alert('Failed to update favourite: ' + serverMsg)
             }
-        } else {
-            // guest: localStorage fallback
-            setFavItems(prev => {
-                const next = exists ? prev.filter(recipe => recipe._id !== item._id) : [...prev, item]
-                localStorage.setItem("fav", JSON.stringify(next))
-                return next
-            })
         }
+        // guests already handled by optimistic update
     }
 
     return (
